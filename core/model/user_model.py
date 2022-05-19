@@ -7,11 +7,11 @@ class UserModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     auth_id = db.Column(db.String)
-    email = db.Column(db.String)
+    email = db.Column(db.String, unique = True)
     name = db.Column(db.String)
     type = db.Column(db.String)
     contact_info = db.Column(db.String)
-    family_members_no = db.Column(db.String)
+    family_members_no = db.Column(db.Integer)
 
     def __init__(self, auth_id, email, name, type, contact_info, family_members_no):
         self.auth_id = auth_id
@@ -32,3 +32,7 @@ class UserModel(db.Model):
             "family_members_no": self.family_members_no
         }
         return json.dumps(data)
+
+    def to_JSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__, 
+            sort_keys=True, indent=4)

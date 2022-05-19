@@ -1,4 +1,5 @@
 from distutils.log import error
+import json
 from flask import request, Blueprint
 from infrastrucure.db_config import db
 from core.model.user_model import UserModel
@@ -16,7 +17,8 @@ def create_user():
         type = data["type"]
         contact_info = data["contact_info"]
         family_members_no = data["family_members_no"]
-        user = UserModel(auth_id=auth_id,
+        user = UserModel(
+            auth_id=auth_id,
             email=email,
             name=name,
             type=type,
@@ -29,8 +31,41 @@ def create_user():
         print(e)
         return "Error", 404
 
+
 #retrieve
 @users_api.route('/users', methods = ['GET'])
 def retrieve_users():
     users = UserModel.query.all()
     return str(users), 200
+
+
+@users_api.route('/users/<int:auth_id>', methods = ['GET'])
+def retrieve_user_by_auth_id(auth_id):
+    user = UserModel.query.filter_by(auth_id=auth_id).first()
+    if user:
+        return json.loads(str(user)), 200
+    return f"User with auth_id={auth_id} doesn't exist", 404
+
+
+#update
+@users_api.route('/users/<int:id>/update', methods = ['PUT'])
+def update_user(id):
+    user = UserModel.query.filter_by(id=id).first()
+    data = request.get_json()
+    if user:
+        for key, value in data.items():
+            setattr(user, key, value)
+        db.session.commit()
+        return json.loads(str(user)), 200
+    return f"User with id={id} doesn't exist", 404
+
+
+#delete
+@users_api.route('/users/<int:id>/delete', methods=['GET','POST', 'PUT', 'DELETE'])
+def delete_user(id):
+    user = UserModel.query.filter_by(id=id).first()
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+        return "Deleted", 200
+    return f"User with id={id} doesn't exist", 404
