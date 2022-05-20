@@ -39,7 +39,7 @@ def retrieve_users():
     return str(users), 200
 
 
-@users_api.route('/users/<int:auth_id>', methods = ['GET'])
+@users_api.route('/users/<string:auth_id>', methods = ['GET'])
 def retrieve_user_by_auth_id(auth_id):
     user = UserModel.query.filter_by(auth_id=auth_id).first()
     if user:
