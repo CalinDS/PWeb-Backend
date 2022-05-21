@@ -1,6 +1,6 @@
 from distutils.log import error
 import json
-from flask import request, Blueprint
+from flask import request, Blueprint, jsonify
 from core.model.booking_model import BookingModel
 from infrastrucure.db_config import db
 from core.model.accommodation_model import AccommodationModel
@@ -52,7 +52,7 @@ def retrieve_accommodations():
             "free_beds_no": free_beds_no
         })
 
-    return str(accomms), 200
+    return jsonify(accomms), 200
 
 
 #update
