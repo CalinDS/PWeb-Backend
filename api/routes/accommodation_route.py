@@ -35,6 +35,13 @@ def retrieve_accommodations():
     accomms = []
     for acc in accommodations:
         accommodation_id = acc.id
+        acc_owner = UserModel.query.filter_by(id=acc.owner_id).first()
+        owner = {
+            "id": acc_owner.id,
+            "contact_info": acc_owner.contact_info,
+            "email": acc_owner.email,
+            "name": acc_owner.name
+        }
         all_beds = acc.beds_no
         occupied_beds = 0
         bookings = BookingModel.query.filter_by(accommodation_id=accommodation_id).all()
@@ -45,7 +52,7 @@ def retrieve_accommodations():
         free_beds_no = all_beds - occupied_beds
         accomms.append({
             "id": acc.id,
-            "owner_id": acc.owner_id,
+            "owner": owner,
             "photo": acc.photo,
             "beds_no": acc.beds_no,
             "address": acc.address,
