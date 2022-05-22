@@ -47,7 +47,8 @@ def retrieve_volunteer_bookings(id):
             refugees.append({
                 "refugee_name": ref.name,
                 "family_members_no": ref.family_members_no,
-                "contact_info": ref.contact_info
+                "contact_info": ref.contact_info,
+                "booking_id": b.id
             })
         bookings_by_accommodation.append({
             "accommodation":  {
