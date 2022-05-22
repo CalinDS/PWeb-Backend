@@ -62,6 +62,7 @@ def retrieve_user_by_auth_id(auth_id):
                 resp["accommodation"]= {
                     "address": accommodation.address,
                     "photo": accommodation.photo,
+                    "owner_name": owner.name,
                     "contact_info": owner.contact_info
                 }
         return jsonify(resp), 200
