@@ -56,13 +56,14 @@ def retrieve_user_by_auth_id(auth_id):
         }
         if user.type == 'refugee':
             booking = BookingModel.query.filter_by(refugee_id=user.id).first()
-            accommodation = AccommodationModel.query.filter_by(id=booking.accommodation_id).first()
-            owner = UserModel.query.filter_by(id=accommodation.owner_id).first()
-            resp["accommodation"]= {
-                "address": accommodation.address,
-                "photo": accommodation.photo,
-                "contact_info": owner.contact_info
-            }
+            if booking:
+                accommodation = AccommodationModel.query.filter_by(id=booking.accommodation_id).first()
+                owner = UserModel.query.filter_by(id=accommodation.owner_id).first()
+                resp["accommodation"]= {
+                    "address": accommodation.address,
+                    "photo": accommodation.photo,
+                    "contact_info": owner.contact_info
+                }
         return jsonify(resp), 200
     return f"User with auth_id={auth_id} doesn't exist", 404
 
