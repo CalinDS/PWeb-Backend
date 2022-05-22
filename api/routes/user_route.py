@@ -63,7 +63,8 @@ def retrieve_user_by_auth_id(auth_id):
                     "address": accommodation.address,
                     "photo": accommodation.photo,
                     "owner_name": owner.name,
-                    "contact_info": owner.contact_info
+                    "contact_info": owner.contact_info,
+                    "booking_id": booking.id
                 }
         return jsonify(resp), 200
     return f"User with auth_id={auth_id} doesn't exist", 404
