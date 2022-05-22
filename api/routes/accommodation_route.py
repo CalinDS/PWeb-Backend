@@ -80,6 +80,9 @@ def update_accommodation(id):
 def delete_accommodation(id):
     accommodation = AccommodationModel.query.filter_by(id=id).first()
     if accommodation:
+        bookings = BookingModel.query.filter_by(accommodation_id=accommodation.id).all()
+        for b in bookings:
+            db.session.delete(b)
         db.session.delete(accommodation)
         db.session.commit()
         return "Deleted", 200
